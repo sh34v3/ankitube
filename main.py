@@ -72,15 +72,15 @@ def make_gif(outfile: str):
     #open frames as proper frames
     frames = [Image.open(image) for image in images] #cool list comprehension!
     frame_one = frames[0]
-    frame_one.save(SAVE_PATH+outfile, format="GIF", append_images=frames, save_all=True,
+    frame_one.save(SAVE_PATH+outfile+".gif", format="GIF", append_images=frames, save_all=True,
                     duration=33, loop=0)
     print("**GIF ready**")
 
 def main():
 
     #link of video to be downloaded
-    link: str = "https://www.youtube.com/watch?v=fC7oUOUEEi4&ab_channel=StackMan"
-    video_name: str = "test"
+    link: str = "https://www.youtube.com/watch?v=YzRaWy7NG4M&ab_channel=Engineeringandarchitecture"
+    video_name: str = "pile_driving"
 
     try:
         print("**getting youtube video object**")
