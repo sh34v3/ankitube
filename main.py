@@ -3,84 +3,81 @@
 #^^special shebang instructs linux to use the python binary being used by virtualenv
 
 
+#import tkinter
+from tkinter import *
+
+class Window(Frame):
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.master = master
+
 #import library for nice typing of complex data structures
 from typing import Dict, List, Tuple
 #import os library for making a directory
 import os
-#import glob for getting frame files
-import glob
+#import subprocess for callimg ffmpeg
+import subprocess
+
 #import web scraping libraries
 from pytube import YouTube
+
 #import ffmpeg tool from moviepy for slicing clips from mp4
-from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
-#import OpenCV for getting JPEGs for making GIFs
-import cv2
-#import Pillow to create GIFs from JPEGs
-from PIL import Image
+import moviepy.video.io.ffmpeg_tools as FFMpeg
+import moviepy.editor as mp
+
+#import ffmpeg
+import ffmpeg
+
+youtube="https://www.youtube.com/watch?v=PuKKL3tOXfo&t=90s&ab_channel=UniversalPictures"
 
 #where to save media
 SAVE_PATH = os.getcwd()+"/media/"
 SCRIPT_DIR = os.getcwd()
 
 #extract a clip from a given video using moviepy
-def clip_mp4(start_time: int, end_time: int, infile_video: str):
-    outfile_clip = "clip.mp4"
-    ffmpeg_extract_subclip(SAVE_PATH+infile_video, start_time, end_time, targetname=SAVE_PATH + outfile_clip)
-    return outfile_clip
+def clip_mp4(start_time: int, end_time: int, infile_video: str, name: str):
+    os.chdir(SAVE_PATH) # change working directory to media temp directory
 
-#convert a given video into a series of images
-def convert_mp4_to_jpgs(infile_video: str):
-    print("**Making frames from clip**")
-    #get video
-    video_capture = cv2.VideoCapture(SAVE_PATH+infile_video)
-    #make image dir
-    try:
-        os.mkdir(SAVE_PATH+"temp_frame_dir")
-    except FileExistsError:
-        #remove and remake tempdir if it already exists
-        os.system("rm -r {}temp_frame_dir".format(SAVE_PATH))
-        os.mkdir(SAVE_PATH+"temp_frame_dir")
-    #change directory to temp_frame_dir
-    os.chdir(SAVE_PATH+"temp_frame_dir")
-    #get continue flag and first frame
-    still_reading, image = video_capture.read()
-    #accumulator variable
-    frame_count = 0
-    while still_reading:
-        #write image
-        cv2.imwrite(str(frame_count)+".png", image)
-
-        #read next image
-        still_reading, image = video_capture.read()
-        frame_count+= 1
+    infile = str(SAVE_PATH+infile_video)
+    infile = str('\"'+infile+'\"')
+    outfile_clip = SAVE_PATH + name + ".webm"
     
-    #change directory back
-    os.chdir(SCRIPT_DIR)
-    print("**Frames finished!**")
+    #subprocess.call(str('ffmpeg -i '+infile_video+' -c:v libvpx-vp9 -b:v 2M -pass 1 -an -f null /dev/null && \ '))
+    subprocess.call([
+        'ffmpeg',                   # call ffmpeg
+        '-i', infile_video,         # this is the video to be converted
+        '-threads', '4',            # use 4 threads for the video conversion
+        '-c:v', 'libvpx-vp9',       # c[odec]:v[ideo] - we use libvpx cause we want webm
+        '-c:a', 'libvorbis',        # c[odec]:a[udio] - this is the one everyone else was using
+        '-b:v',  '400k',            # reccomended video bitrate
+        '-b:a', '192k',             # reccomended audio bitrate
+        '-vf', 'trim='+str(start_time)+':'+str(end_time), # trim the video to desired points during rencoding
+        '-deadline', 'realtime',    # setting for quality vs. speed (best, good, realtime (fastest)); boundry for quality vs. time set the following settings
+        '-qmin', '0',               # quality minimum boundry. (lower means better)
+        '-qmax', '50',              # quality maximum boundry (higher means worse)
+        'y',                        # overwrite the file if it's in the directory
+        'outfile.webm'              # file to be written out
+    ])
+   
 
-#sort a list of string based on numerical file prefix
-def numSort(e):
-    return eval(e[:-4])
+    # stream = ffmpeg.input(SAVE_PATH+infile_video)
+    # inv = stream.video
+    # inv = inv.trim(start=start_time, end=end_time)
+    # ina = stream.audio
+    # ina = ina.atrim(start=start_time, end=end_time)
+    # out = ffmpeg.output(inv, ina, outfile_clip)
+    # out.run()
 
-def make_gif(outfile: str):
-    print("**Cooking GIF soup**")
-    #changedirs
-    os.chdir(SAVE_PATH+"temp_frame_dir/")
-    #get frames
-    images = glob.glob("*.png")
-    images.sort(key=numSort)
-    #open frames as proper frames
-    frames = [Image.open(image) for image in images] #cool list comprehension!
-    frame_one = frames[0]
-    frame_one.save(SAVE_PATH+outfile, format="GIF", append_images=frames, save_all=True,
-                    duration=33, loop=0)
-    print("**GIF ready**")
+    #stream = ffmpeg.input(outfile_clip)
+    #stream = ffmpeg.output(stream, outfile_clip, {'c:v' : 'libvpx-vp9','b:v':'2M','pass':'1','c:a':'libopus','y':''})
+    #ffmpeg.run(stream)'
+
 
 def main():
 
     #link of video to be downloaded
-    link: str = "https://www.youtube.com/watch?v=fC7oUOUEEi4&ab_channel=StackMan"
-    video_name: str = "test"
+    link: str = input("Please enter video link: ")
+    video_name: str = "temp"
 
     try:
         print("**getting youtube video object**")
@@ -101,10 +98,10 @@ def main():
  
     print("**download complete**")
 
-    clip_start: int = eval(input("Enter clip start timestamp in seconds: "))
-    clip_end: int = eval(input("Enter clip end timestamp in seconds: "))
 
-    clip = clip_mp4(clip_start, clip_end, download_video.default_filename)
-    convert_mp4_to_jpgs(clip)
-    make_gif(input("What would you like to call your GIF: "))
-main()
+    #I with the program would handle my typos
+    clip_start: int = input("Enter clip start timestamp like so: min sec: ")
+    clip_start = eval(clip_start[0])*60 + eval(clip_start[2:])
+    clip_end: int = input("Enter clip end timestamp like so: min sec: ")
+    clip_end = eval(clip_end[0])*60 + eval(clip_end[2:])
+    clip = clip_mp4(clip_start, clip_end, download_video.default_filename, "clip")
