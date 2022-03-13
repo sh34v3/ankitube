@@ -3,14 +3,6 @@
 #^^special shebang instructs linux to use the python binary being used by virtualenv
 
 
-#import tkinter
-from tkinter import *
-
-class Window(Frame):
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.master = master
-
 #import library for nice typing of complex data structures
 from typing import Dict, List, Tuple
 #import os library for making a directory
