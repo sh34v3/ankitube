@@ -42,7 +42,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Enter timing in seconds:</string>
+     <string>Clip times (in seconds):</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="link_textbox">
@@ -68,6 +68,9 @@
       <width>43</width>
       <height>24</height>
      </rect>
+    </property>
+    <property name="maximum">
+     <number>599</number>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -115,6 +118,15 @@
       <height>24</height>
      </rect>
     </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>600</number>
+    </property>
+    <property name="value">
+     <number>10</number>
+    </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
@@ -156,7 +168,7 @@
       <x>530</x>
       <y>20</y>
       <width>151</width>
-      <height>81</height>
+      <height>71</height>
      </rect>
     </property>
     <property name="font">
@@ -191,7 +203,10 @@
      </rect>
     </property>
     <property name="value">
-     <number>24</number>
+     <number>0</number>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
@@ -204,18 +219,23 @@
      <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="menu_file">
     <property name="title">
      <string>File</string>
     </property>
     <addaction name="actionHelp"/>
    </widget>
-   <addaction name="menuFile"/>
+   <addaction name="menu_file"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionHelp">
+  <action name="action_help">
    <property name="text">
     <string>Help</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Info</string>
    </property>
   </action>
  </widget>

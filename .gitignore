@@ -1,0 +1,10 @@
+# created by virtualenv automatically
+*.log
+.templates
+.vscode
+bin
+lib
+media
+undefined
+*.cfg
+*.js
