@@ -30,24 +30,24 @@ SCRIPT_DIR = os.getcwd()
 def clip_mp4(start_time: int, end_time: int, infile_video: str, name: str):
     os.chdir(SAVE_PATH) # change working directory to media temp directory
 
-    infile = str(SAVE_PATH+infile_video)
+    infile = str(infile_video)
     infile = str('\"'+infile+'\"')
-    outfile_clip = SAVE_PATH + name + ".webm"
+    outfile_clip = name + ".webm"
     
     #subprocess.call(str('ffmpeg -i '+infile_video+' -c:v libvpx-vp9 -b:v 2M -pass 1 -an -f null /dev/null && \ '))
     subprocess.call([
         'ffmpeg',                   # call ffmpeg
+        '-ss', str(start_time),          # our clip starts here
         '-i', infile_video,         # this is the video to be converted
+        '-t', str(end_time - start_time), #how long our clip is
         '-threads', '4',            # use 4 threads for the video conversion
         '-c:v', 'libvpx-vp9',       # c[odec]:v[ideo] - we use libvpx cause we want webm
         '-c:a', 'libvorbis',        # c[odec]:a[udio] - this is the one everyone else was using
         '-b:v',  '400k',            # reccomended video bitrate
         '-b:a', '192k',             # reccomended audio bitrate
-        '-vf', 'trim='+str(start_time)+':'+str(end_time), # trim the video to desired points during rencoding
         '-deadline', 'realtime',    # setting for quality vs. speed (best, good, realtime (fastest)); boundry for quality vs. time set the following settings
         '-qmin', '0',               # quality minimum boundry. (lower means better)
         '-qmax', '50',              # quality maximum boundry (higher means worse)
-        'y',                        # overwrite the file if it's in the directory
         'outfile.webm'              # file to be written out
     ])
    
@@ -97,3 +97,5 @@ def main():
     clip_end: int = input("Enter clip end timestamp like so: min sec: ")
     clip_end = eval(clip_end[0])*60 + eval(clip_end[2:])
     clip = clip_mp4(clip_start, clip_end, download_video.default_filename, "clip")
+
+main()
