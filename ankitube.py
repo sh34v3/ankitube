@@ -6,11 +6,15 @@
 
 #--NOTES--
 
-# TODO
+# WISHLIST
 # Implement a QtThread class that will allow me to dynamically update the progress bar: https://www.youtube.com/watch?v=ivcxZSHL7jM&ab_channel=VFXPipeline
 # Implement a way to determine progress of ffmpeg from stdout: https://www.youtube.com/watch?v=-z1pvtMOTmg&ab_channel=FlorianDahlitz
 # ----if I can get stdout dynamically from ffmpeg, I simply need to take the time=00:00:xx field from its output
 # ---- time in seconds/(clip_end - clip_start) will give completion percentage
+
+# Status
+# ankitube now only requires pip to be installed; static-ffmpeg functional
+# 
 
 # -*- coding: utf-8 -*-
 
@@ -29,7 +33,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 #where to save media
-SAVE_PATH = os.getcwd()+"/media/"
+SAVE_PATH = os.getcwd()+'/media/'
 SCRIPT_DIR = os.getcwd()
 
 class Ui_MainWindow(object):
@@ -160,7 +164,7 @@ class Ui_MainWindow(object):
         self.statusbar.repaint()
         # self.progress_bar.setValue(50)
         # downloading video
-        download_video.download(output_path=SAVE_PATH)
+        download_video.download(output_path=SAVE_PATH, filename="clip.mp4")
 
         clip_start: int = int(self.start_time.text())
         clip_end: int = int(self.end_time.text())
@@ -170,13 +174,13 @@ class Ui_MainWindow(object):
 
         self.statusbar.showMessage("Done!")
         self.statusbar.repaint()
+        sys.exit()
 
     #extract a clip from a video file by callimg ffmpeg
     def clipencode(self, start_time: int, end_time: int, infile_video: str):
         os.chdir(SAVE_PATH) # change working directory to media temp directory
 
-        infile: str = str(infile_video)
-        infile: str = str('\"'+infile+'\"')
+        clip_path= SAVE_PATH+"clip.mp4"
 
         uniquename = ""
         for ch in infile_video:
@@ -196,9 +200,9 @@ class Ui_MainWindow(object):
             self.statusbar.repaint()
             #subprocess.call(str('ffmpeg -i '+infile_video+' -c:v libvpx-vp9 -b:v 2M -pass 1 -an -f null /dev/null && \ '))
             subprocess.call([
-                'ffmpeg',                   # call ffmpeg
+                'static_ffmpeg',                   # call ffmpeg
                 '-ss', str(start_time),          # our clip starts here
-                '-i', infile_video,         # this is the video to be converted
+                '-i', clip_path,         # this is the video to be converted
                 '-t', str(end_time - start_time), #how long our clip is
                 '-threads', '4',            # use 4 threads for the video conversion
                 '-c:v', 'libvpx-vp9',       # c[odec]:v[ideo] - we use libvpx cause we want webm
@@ -215,10 +219,10 @@ class Ui_MainWindow(object):
             self.statusbar.repaint()
              #subprocess.call(str('ffmpeg -i '+infile_video+' -c:v libvpx-vp9 -b:v 2M -pass 1 -an -f null /dev/null && \ '))
             subprocess.call([
-                'ffmpeg',                   # call ffmpeg
+                'static_ffmpeg',                   # call ffmpeg
                 '-an',                      #remove all audio streams
                 '-ss', str(start_time),          # our clip starts here
-                '-i', infile_video,         # this is the video to be converted
+                '-i', clip_path,         # this is the video to be converted
                 '-t', str(end_time - start_time), #how long our clip is
                 '-threads', '4',            # use 4 threads for the video conversion
                 '-c:v', 'libvpx-vp9',       # c[odec]:v[ideo] - we use libvpx cause we want webm

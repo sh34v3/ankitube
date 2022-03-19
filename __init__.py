@@ -1,3 +1,17 @@
+#install ffmpeg if necessary
+import os
+import subprocess
+import sys
+
+
+try: #see if static-ffmpeg is installed
+    os.system("static_ffmpeg -version")
+    os.system("static_ffprobe -version")
+except: # if not, call pip and install static-ffmpeg
+    subprocess.call([sys.executable, "-m", "pip", "install", "static-ffmpeg"])
+    os.system("static_ffmpeg -version")
+    os.system("static_ffprobe -version")
+
 # import the main window object (mw) from aqt
 from aqt import mw
 # import the "show info" tool from utils.py
