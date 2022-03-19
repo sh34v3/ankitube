@@ -36,8 +36,8 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(700, 198)
-        MainWindow.setMinimumSize(QtCore.QSize(700, 198))
-        MainWindow.setMaximumSize(QtCore.QSize(700, 198))
+        MainWindow.setMinimumSize(QtCore.QSize(700, 150)) #with status bar: 198 height
+        MainWindow.setMaximumSize(QtCore.QSize(700, 150))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
