@@ -8,3 +8,5 @@ media
 undefined
 *.cfg
 *.js
+lib64
+share
