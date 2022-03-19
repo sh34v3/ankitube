@@ -223,17 +223,12 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionHelp"/>
+    <addaction name="action_help"/>
    </widget>
    <addaction name="menu_file"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_help">
-   <property name="text">
-    <string>Help</string>
-   </property>
-  </action>
-  <action name="actionHelp">
    <property name="text">
     <string>Info</string>
    </property>
