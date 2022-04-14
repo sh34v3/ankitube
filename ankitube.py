@@ -6,6 +6,8 @@
 
 #--NOTES--
 
+# I created the UI code using "pyuic5 -x inputfile.ui -o outputfile.py" in a terminal
+
 # WISHLIST
 # Implement a QtThread class that will allow me to dynamically update the progress bar: https://www.youtube.com/watch?v=ivcxZSHL7jM&ab_channel=VFXPipeline
 # Implement a way to determine progress of ffmpeg from stdout: https://www.youtube.com/watch?v=-z1pvtMOTmg&ab_channel=FlorianDahlitz
@@ -39,8 +41,8 @@ SCRIPT_DIR = os.getcwd()
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(700, 198)
-        MainWindow.setMinimumSize(QtCore.QSize(700, 150)) #with status bar: 198 height
+        MainWindow.resize(700, 150)
+        MainWindow.setMinimumSize(QtCore.QSize(700, 150))
         MainWindow.setMaximumSize(QtCore.QSize(700, 150))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -58,8 +60,8 @@ class Ui_MainWindow(object):
         self.link_textbox.setFont(font)
         self.link_textbox.setObjectName("link_textbox")
         self.start_time = QtWidgets.QSpinBox(self.centralwidget)
-        self.start_time.setGeometry(QtCore.QRect(220, 70, 43, 24))
-        self.start_time.setMaximum(599)
+        self.start_time.setGeometry(QtCore.QRect(220, 70, 61, 24))
+        self.start_time.setMaximum(9999)
         self.start_time.setObjectName("start_time")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setGeometry(QtCore.QRect(180, 70, 41, 21))
@@ -68,25 +70,25 @@ class Ui_MainWindow(object):
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(280, 70, 61, 21))
+        self.label_4.setGeometry(QtCore.QRect(290, 70, 31, 21))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.end_time = QtWidgets.QSpinBox(self.centralwidget)
-        self.end_time.setGeometry(QtCore.QRect(310, 70, 43, 24))
+        self.end_time.setGeometry(QtCore.QRect(330, 70, 61, 24))
         self.end_time.setMinimum(1)
-        self.end_time.setMaximum(600)
+        self.end_time.setMaximum(10000)
         self.end_time.setProperty("value", 10)
         self.end_time.setObjectName("end_time")
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(370, 70, 81, 21))
+        self.label_5.setGeometry(QtCore.QRect(400, 70, 81, 21))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(460, 70, 16, 21))
+        self.checkBox.setGeometry(QtCore.QRect(490, 70, 16, 21))
         self.checkBox.setText("")
         self.checkBox.setChecked(True)
         self.checkBox.setObjectName("checkBox")
@@ -131,7 +133,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Ankitube 0.1"))
         self.label_2.setText(_translate("MainWindow", "Clip times (in seconds):"))
         self.label_3.setText(_translate("MainWindow", "Start:"))
         self.label_4.setText(_translate("MainWindow", "End:"))
@@ -238,9 +240,10 @@ class Ui_MainWindow(object):
 
         #this is the easiest way to do a multi line string with easily understood formatting
         text =("Ankitube is designed to allow download of YouTube video clips easily for educational purposes. \n \n"
-        "Simply copy the URL into the text box, enter the clip start and end times. "
-        "FFMpeg is a required dependency to allow .mp4 to .webm conversion "
-        "to ensure anki video player compatability.")
+        "Simply copy the URL into the text box, enter the clip start and end times (in seconds). \n\n"
+        "PIP is an Ankitube dependency and is required for use.\n\n "
+        "MIT License, 2022")
+
         
         title = tl
         msgBox = QtWidgets.QMessageBox(icon, title, text)
