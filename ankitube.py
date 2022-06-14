@@ -15,8 +15,7 @@
 # ---- time in seconds/(clip_end - clip_start) will give completion percentage
 
 # Status
-# ankitube now only requires pip to be installed; static-ffmpeg functional
-# 
+# ankitube now only requires pip to be installed
 
 # -*- coding: utf-8 -*-
 
@@ -101,11 +100,13 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 20, 71, 31))
         self.label.setObjectName("label")
+
         # self.progress_bar = QtWidgets.QProgressBar(self.centralwidget)
         # self.progress_bar.setGeometry(QtCore.QRect(10, 110, 671, 31))
         # self.progress_bar.setProperty("value", 0)
         # self.progress_bar.setInvertedAppearance(False)
         # self.progress_bar.setObjectName("progress_bar")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 700, 20))
@@ -127,7 +128,7 @@ class Ui_MainWindow(object):
         self.action_help.triggered.connect(lambda: self.showHelpDialog("Help")) 
         #^
         #have to use a lambda function if you want to pass a parameter within this framework
-        #thank being said, I put a parameter in here for my own educational purposes, not because I needed to
+        #that being said, I put a parameter in here for my own educational purposes, not because I needed to
 
         self.statusbar.showMessage("Ready...")
 
@@ -259,3 +260,21 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
+
+#hooks?
+
+Hook( #hook for the editor having initialized all but its buttons
+name="editor_did_init_left_buttons",
+args=["buttons: list[str]", "editor: aqt.editor.Editor"],
+),
+
+Hook( #hook for the editor having initialized its buttons
+        name="editor_did_init_buttons",
+        args=["buttons: list[str]", "editor: aqt.editor.Editor"],
+    ),
+
+Hook( #hook for the add cards dialogue initializing
+    name="add_cards_did_init",
+    args=["addcards: aqt.addcards.AddCards"],
+),

@@ -1,4 +1,3 @@
-#install ffmpeg if necessary
 import os
 import subprocess
 import sys
@@ -14,8 +13,8 @@ except: # if not, call pip and install static-ffmpeg
 
 # import the main window object (mw) from aqt
 from aqt import mw
-# import the "show info" tool from utils.py
-from aqt.utils import showInfo, qconnect
+
+from aqt.utils import *
 # import all of the Qt GUI library
 from aqt.qt import *
 from aqt import gui_hooks
@@ -23,17 +22,31 @@ from aqt import gui_hooks
 # We're going to add a menu item below. First we want to create a function to
 # be called when the menu item is activated.
 
-def testFunction() -> None:
-    # get the number of cards in the current collection, which is stored in
-    # the main window
-    cardCount = mw.col.cardCount()
-    # show a message box
-    showInfo("Card count: %d" % cardCount)
+def AddAnkiTubeButton() -> None:
+    """
+    Adds a button to the add card dialogue that opens AnkiTube
 
-# create a new menu item, "test"
-action = QAction("test", mw)
-# set it to call testFunction when it's clicked
-qconnect(action.triggered, testFunction)
-# and add it to the tools menu
-mw.form.menuTools.addAction(action)
+    Callback function for add_cards_did_init hook
+    """
+    at_button = aqt.qt.QPushButton()
+    at_button.show()
 
+
+gui_hooks.add_cards_did_init.append(testFuncton)
+
+
+
+# Hook( #hook for the editor having initialized all but its buttons
+# name="editor_did_init_left_buttons",
+# args=["buttons: list[str]", "editor: aqt.editor.Editor"],
+# ),
+
+# Hook( #hook for the editor having initialized its buttons
+#         name="editor_did_init_buttons",
+#         args=["buttons: list[str]", "editor: aqt.editor.Editor"],
+#     ),
+
+# Hook( #hook for the add cards dialogue initializing
+#     name="add_cards_did_init",
+#     args=["addcards: aqt.addcards.AddCards"],
+# ),
